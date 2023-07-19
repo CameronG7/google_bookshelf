@@ -41,8 +41,8 @@ console.log(userFormData)
       }
 
       // const { token, user } = await data.json();
-      console.log(data.user);
-      Auth.login(data.token);
+      console.log(data.addUser.user);
+      Auth.login(data.addUser.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
