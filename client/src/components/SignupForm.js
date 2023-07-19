@@ -30,7 +30,7 @@ const SignupForm = () => {
       event.preventDefault();
       event.stopPropagation();
     }
-
+console.log(userFormData)
     try {
       const {data} = await addUser({
         variables:{...userFormData}
@@ -40,9 +40,9 @@ const SignupForm = () => {
         throw new Error('something went wrong!');
       }
 
-      const { token, user } = await data.json();
-      console.log(user);
-      Auth.login(token);
+      // const { token, user } = await data.json();
+      console.log(data.user);
+      Auth.login(data.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
