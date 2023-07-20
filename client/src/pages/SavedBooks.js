@@ -48,6 +48,7 @@ const SavedBooks = () => {
     };
 
     getUserData();
+    // data change on refetch so use to determine if `useEffect()` hook needs to run again
   }, [loading, data]);
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
@@ -70,7 +71,7 @@ const SavedBooks = () => {
         throw new Error('something went wrong!');
       }
       console.log(data.removeBook)
-      // const updatedUser = await response.json();
+  
       setUserData(data.removeBook);
       // upon success, remove book's id from localStorage
       removeBookId(bookId);

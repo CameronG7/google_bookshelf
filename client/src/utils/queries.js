@@ -4,7 +4,6 @@ export const QUERY_USER = gql`
   query currentUser {
   me {
     username
-    _id
     email
     bookCount
     savedBooks {

@@ -1,14 +1,15 @@
-const { Book, User } = require('../models')
+const { User } = require('../models')
 const { signToken } = require('../utils/auth');
 const { AuthenticationError } = require('apollo-server-express')
 
 const resolvers = {
 
   Query: {
-    me: async (root, args,context) => {
+    me: async (root, args, context) => {
       const foundUser = await User.findOne({ email: context.user.email })
       return foundUser
     },
+    // all just for testing
     all: async () => {
       const foundUsers = await User.find({})
       return foundUsers
