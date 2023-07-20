@@ -18,29 +18,34 @@ import { removeBookId } from '../utils/localStorage';
 
 const SavedBooks = () => {
   const [userData, setUserData] = useState({});
-  const {loading, error, data} = useQuery(QUERY_USER);
+  const { loading, error, data, refetch } = useQuery(QUERY_USER);
   const [removeBook, { errorRemove }] = useMutation(REMOVE_BOOK,
-    {
-      refetchQueries: [QUERY_USER]
-    })
+    {refetchQueries: [QUERY_USER]})
   // use this to determine if `useEffect()` hook needs to run again
-  const userDataLength = Object.keys(userData)?.length;
+  const userDataLength =  Object.keys(userData).length;
 
+
+  //something not quite right but I can't figure out what but it does what I want 
   useEffect(() => {
     const getUserData = async () => {
+    
+     await refetch()
+     console.log('refetch')
+
       try {
+        
         const token = Auth.loggedIn() ? Auth.getToken() : null;
 
         if (!token) {
+          console.log('logged out')
           return false;
         }
-        console.log(data)
-        
         
         if (!loading) {
           setUserData(data.me);
         }
-       
+        
+
       } catch (err) {
         console.error(error);
         console.error(err);
@@ -48,8 +53,14 @@ const SavedBooks = () => {
     };
 
     getUserData();
-    // data change on refetch so use to determine if `useEffect()` hook needs to run again
-  }, [loading, data]);
+    
+    console.log("render")
+    
+    // data chang}e on refetch so use to determine if `useEffect()` hook needs to run again
+  }, [userDataLength]);
+
+ if (loading) { 
+  console.log("loading")}
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
@@ -61,21 +72,22 @@ const SavedBooks = () => {
     }
 
     try {
-      const{data} = await removeBook({
-        variables: {bookId: bookId}
+      const { data } = await removeBook({
+        variables: { bookId: bookId }
       })
-      if (errorRemove){
+      if (errorRemove) {
         throw new Error('something went wrong!');
       }
       if (!data) {
         throw new Error('something went wrong!');
       }
       console.log(data.removeBook)
-  
+
       setUserData(data.removeBook);
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
-    
+
+
     } catch (err) {
       console.error(err);
     }
