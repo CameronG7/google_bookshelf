@@ -29,11 +29,8 @@ const SavedBooks = () => {
   useEffect(() => {
     const getUserData = async () => {
     
-     await refetch()
-     console.log('refetch')
-
       try {
-        
+        await refetch()
         const token = Auth.loggedIn() ? Auth.getToken() : null;
 
         if (!token) {
@@ -41,10 +38,10 @@ const SavedBooks = () => {
           return false;
         }
         
-        if (!loading) {
+        if (!loading && data) {
           setUserData(data.me);
         }
-        
+        console.log(userData)
 
       } catch (err) {
         console.error(error);
@@ -55,9 +52,10 @@ const SavedBooks = () => {
     getUserData();
     
     console.log("render")
+   
     
     // data chang}e on refetch so use to determine if `useEffect()` hook needs to run again
-  }, [userDataLength]);
+  }, [userDataLength, loading]);
 
  if (loading) { 
   console.log("loading")}
